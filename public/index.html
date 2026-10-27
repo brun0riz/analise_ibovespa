@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142d30">
+  <meta name="description" content="Explore a história do Ibovespa desde 1995, compare mandatos presidenciais e entenda retorno e risco em cada período.">
+  <title>IBOV em perspectiva · Bolsa e governos</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23142d30'/%3E%3Cpath d='M8 28l8-10 7 4 9-13' fill='none' stroke='%23c7ee94' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/style.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Ir para o conteúdo</a>
+  <aside class="sidebar">
+    <a class="brand" href="#main" aria-label="IBOV em perspectiva, início">
+      <span class="brand-icon"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M4 24l8-11 7 5L28 5"/><path d="M22 5h6v6"/></svg></span>
+      <span><strong>IBOV</strong><small>em perspectiva</small></span>
+    </a>
+    <div class="nav-label">EXPLORAR</div>
+    <nav aria-label="Navegação principal">
+      <a class="nav-link active" href="#historico"><span aria-hidden="true">▥</span> Visão histórica <span class="nav-arrow">↗</span></a>
+      <a class="nav-link" href="#comparar"><span aria-hidden="true">⇄</span> Comparar mandatos</a>
+      <a class="nav-link" href="#metodologia"><span aria-hidden="true">⊞</span> Fontes e metodologia</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <strong>O contexto faz diferença.</strong>
+      <p>Uma visão dos dados para formar suas próprias perguntas.</p>
+      <span class="source-pill"><span></span> Dados públicos · acesso gratuito</span>
+      <small>Ibovespa em reais · desde 1995</small>
+    </div>
+  </aside>
+
+  <div class="workspace">
+    <header class="topbar">
+      <div class="breadcrumb">Mercado brasileiro <span>/</span> <strong>Bolsa e governos</strong></div>
+      <div class="top-actions"><span id="freshness" class="freshness">Consultando a fonte…</span><button id="refresh" class="button button-small" type="button"><span aria-hidden="true">↻</span> Atualizar dados</button></div>
+    </header>
+    <main id="main">
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <div class="eyebrow"><span class="live-dot"></span> HISTÓRIA ECONÔMICA EM DADOS</div>
+          <h1 id="page-title">A bolsa, através<br class="desktop-break"> dos governos<span>.</span></h1>
+          <p>Explore o Ibovespa em cada mandato presidencial.<br class="desktop-break"> Compare trajetórias, retornos e os riscos de cada período.</p>
+        </div>
+        <div class="intro-note"><span class="note-mark" aria-hidden="true">↗</span><span>Uma série.<br><strong>Diferentes perspectivas.</strong><small>1995 — último dado disponível</small></span></div>
+      </section>
+
+      <div id="notice" class="notice" role="status" hidden></div>
+      <div id="error" class="error-panel" role="alert" hidden><strong>Não foi possível carregar o histórico.</strong><p id="error-message"></p><button class="button" id="retry" type="button">Tentar novamente</button></div>
+      <div id="loading" class="loading-status" role="status"><span class="spinner"></span> Buscando os fechamentos diários do Ibovespa… A primeira consulta pode levar alguns segundos.</div>
+
+      <div id="dashboard" aria-busy="true">
+        <section class="stats-grid" aria-label="Resumo dos dados">
+          <article class="stat"><div class="stat-label">ÚLTIMO FECHAMENTO <span aria-hidden="true">↗</span></div><div class="stat-value" id="last-close">—</div><div class="stat-foot" id="last-close-meta">Consultando dados</div></article>
+          <article class="stat"><div class="stat-label">RETORNO NO RECORTE <span aria-hidden="true">↗</span></div><div class="stat-value" id="range-return">—</div><div class="stat-foot" id="range-return-meta">Selecione um período</div></article>
+          <article class="stat"><div class="stat-label">MAIOR QUEDA NO RECORTE <span aria-hidden="true">↘</span></div><div class="stat-value" id="range-drawdown">—</div><div class="stat-foot">Do pico ao fundo · fechamentos</div></article>
+          <article class="stat stat-accent"><div class="stat-label">MANDATOS NO HISTÓRICO <span aria-hidden="true">⊞</span></div><div class="stat-value" id="mandate-count">—</div><div class="stat-foot" id="coverage">FHC I ao último período disponível</div></article>
+        </section>
+
+        <section id="historico" class="panel historical" aria-labelledby="history-title">
+          <div class="panel-heading">
+            <div><div class="eyebrow subtle">01 / A VISÃO AO LONGO DO TEMPO</div><h2 id="history-title">Histórico do Ibovespa</h2><p>As faixas marcam quem exercia a Presidência em cada período.</p></div>
+            <div class="segmented" aria-label="Unidade do gráfico"><button type="button" class="selected" data-mode="points" aria-pressed="true">Pontos</button><button type="button" data-mode="return" aria-pressed="false">Retorno no recorte</button></div>
+          </div>
+          <form id="filters" class="filters">
+            <label>Mandato<select id="mandate-filter"><option value="all">Todos os mandatos</option></select></label>
+            <label>De<input type="date" id="start-date" min="1995-01-01" value="1995-01-01" required></label>
+            <label>Até<input type="date" id="end-date" required></label>
+            <button class="button apply-button" type="submit">Aplicar</button>
+            <button class="text-button" id="reset" type="button">Ver tudo ↗</button>
+            <label class="log-control"><input type="checkbox" id="log-scale"> Escala logarítmica</label>
+          </form>
+          <p id="filter-error" class="field-error" role="alert" hidden></p>
+          <div class="chart-and-detail">
+            <div class="chart-column">
+              <div class="chart-meta"><span id="chart-unit">IBOVESPA · PONTOS</span><span id="chart-range">—</span></div>
+              <div id="history-chart" class="chart history-chart" tabindex="0" role="group" aria-label="Histórico interativo. Mova o mouse, toque ou use as setas do teclado para explorar as datas." aria-describedby="chart-help"></div>
+              <p class="chart-help" id="chart-help"><span aria-hidden="true">⌁</span> Passe o mouse ou toque no gráfico para explorar. Pelo teclado, use ← e →.</p>
+            </div>
+            <aside id="detail" class="detail-card" aria-label="Detalhes do mandato e do pregão"><div class="detail-placeholder">O card com os dados do mandato aparecerá aqui.</div></aside>
+          </div>
+          <div id="history-legend" class="legend" aria-label="Selecionar um mandato"></div>
+        </section>
+
+        <section id="comparar" class="comparison-section" aria-labelledby="compare-title">
+          <div class="section-title"><div><div class="eyebrow subtle">02 / COLOCANDO EM PERSPECTIVA</div><h2 id="compare-title">Como os mandatos se comparam?</h2></div><span class="tag">Mesmo ponto de partida</span></div>
+          <div class="compare-grid">
+            <article class="panel normalized-panel">
+              <div class="panel-heading compact"><div><h3>Trajetórias em base 100</h3><p>100 no início de cada mandato. Eixo horizontal em meses.</p></div><span class="chart-badge">BASE 100</span></div>
+              <div id="compare-chart" class="chart compare-chart" tabindex="0" role="group" aria-label="Comparação em base 100. Use as setas para explorar o tempo desde a posse."></div>
+              <div id="compare-readout" class="compare-readout" aria-live="polite">Selecione as curvas abaixo para comparar.</div>
+              <div id="compare-legend" class="legend comparison-legend" aria-label="Mandatos exibidos na comparação"></div>
+            </article>
+            <article class="panel ranking-panel">
+              <div class="panel-heading compact"><div><h3>Retorno por mandato</h3><p>Compare com a mesma medida.</p></div></div>
+              <label class="rank-label" for="rank-metric">Medida de comparação</label><select id="rank-metric"><option value="annualized">Retorno anualizado (% a.a.)</option><option value="total">Retorno acumulado (%)</option><option value="drawdown">Maior queda (%)</option></select>
+              <div id="ranking" class="ranking"></div>
+              <p class="small-note">* Período parcial. Mandatos têm durações diferentes. A maior queda usa fechamentos diários.</p>
+            </article>
+          </div>
+          <article class="panel table-panel">
+            <div class="panel-heading compact"><div><h3>Os números de cada governo</h3><p>Mandatos completos em sua própria janela; independem do filtro do histórico.</p></div><button id="export" class="button button-small" type="button">↓ Exportar CSV</button></div>
+            <div class="table-scroll"><table><caption class="sr-only">Indicadores por mandato presidencial. Ordene pelos botões no cabeçalho.</caption><thead><tr><th scope="col">Presidente / mandato</th><th scope="col">Partido no período</th><th scope="col">Período observado</th><th scope="col" aria-sort="none"><button type="button" data-sort="total">Acumulado ↕</button></th><th scope="col" aria-sort="none"><button type="button" data-sort="annualized">Ao ano ↕</button></th><th scope="col" aria-sort="none"><button type="button" data-sort="drawdown">Maior queda ↕</button></th><th scope="col">Volatilidade a.a.</th><th scope="col">Cobertura</th></tr></thead><tbody id="mandates-table"></tbody></table></div>
+          </article>
+        </section>
+
+        <section id="metodologia" class="method-section" aria-labelledby="method-title">
+          <div class="section-title"><div><div class="eyebrow subtle">03 / ANTES DE TIRAR CONCLUSÕES</div><h2 id="method-title">Dados abertos. Critérios claros.</h2></div></div>
+          <div class="method-grid">
+            <article><span class="method-number">01</span><h3>De onde vêm os dados</h3><p>Fechamentos diários, abertura, máxima, mínima e volume do <a href="https://finance.yahoo.com/quote/%5EBVSP/history/" target="_blank" rel="noopener noreferrer">Yahoo Finance (^BVSP) ↗</a>. Consulta gratuita, sem chave, por endpoint público não oficial, sujeito a limites e indisponibilidade.</p><p>Presidentes, partidos e datas vêm de um cadastro local revisável, com referências do <a href="https://www.gov.br/cti/pt-br/trajetoria-historica/presidentes-da-republica-desde-a-criacao-do-cti" target="_blank" rel="noopener noreferrer">Governo Federal ↗</a>. Esses dados políticos não são fornecidos pela API financeira.</p></article>
+            <article><span class="method-number">02</span><h3>Como fazemos as contas</h3><p>Retorno = fechamento final ÷ fechamento anterior à posse − 1. Cada pregão pertence a um único governo. O recorte começa em 1995, após a implantação do real.</p><p>Anualizado: retorno composto por 365,2425 dias. Maior queda: recuo máximo desde um pico de fechamento. Volatilidade: desvio-padrão amostral dos retornos logarítmicos diários × √252.</p><p>Os valores são nominais em reais, sem ajuste por IPCA, câmbio, custos ou impostos. O <a href="https://b3.com.br/pt_br/market-data-e-indices/indices/indices-amplos/ibovespa-b3.htm" target="_blank" rel="noopener noreferrer">Ibovespa é um índice de retorno total ↗</a>; sua metodologia já considera proventos.</p></article>
+            <article><span class="method-number">03</span><h3>O que a comparação permite</h3><p>O painel mostra o desempenho da bolsa <strong>durante</strong> cada governo. Isso não isola a contribuição do presidente nem representa toda a economia. Juros, inflação, commodities, crises e expectativas também influenciam o índice.</p><p>Temer entra em 12/05/2016, início do exercício interino. O fim formal do mandato de Dilma ocorreu em 31/08/2016. <a href="https://www.gov.br/secretariageral/pt-br/centrais-de-conteudo/biblioteca-da-pr/galeria-dos-ex-presidentes/dilma-vana-rousseff/" target="_blank" rel="noopener noreferrer">Consulte a referência ↗</a>.</p><p>O mandato em curso é parcial. Barras do dia corrente são omitidas; lacunas ou atraso na fonte são sinalizados. O cache é renovado a cada hora.</p></article>
+          </div>
+        </section>
+      </div>
+      <footer><a class="footer-brand" href="#main">IBOV <span>em perspectiva</span></a><span>Contexto para interpretar. Dados para explorar.</span><span id="footer-source">Fonte: Yahoo Finance · ^BVSP</span></footer>
+    </main>
+  </div>
+  <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+  <noscript><div class="noscript">Ative o JavaScript para carregar os dados e interagir com os gráficos.</div></noscript>
+</body>
+</html>

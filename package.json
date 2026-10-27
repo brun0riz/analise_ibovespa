@@ -1,0 +1,16 @@
+{
+  "name": "ibov-em-perspectiva",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Histórico do Ibovespa por mandato presidencial, com API gratuita e sem dependências.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node server.mjs",
+    "dev": "node --watch server.mjs",
+    "test": "node --test",
+    "check": "node --check server.mjs && node --check public/app.js && node --check public/model.js"
+  }
+}
